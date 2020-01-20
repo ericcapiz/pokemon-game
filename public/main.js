@@ -68,7 +68,10 @@ while (i < pokemonsEl.length) {
     player1Img[0].src = gameState.currentPokemon[0].img
 		player2Img[0].src = gameState.currentRivalPokemon[0].img
 //##once user/cpu selects a pokemon, imgs will show on battle screen
+
+//health for user and cpu
 	gameState.currentPokemon[0].health = calculateHealth(gameState.currentPokemon)
+	gameState.currentRivalPokemon[0].health = calculateHealth(gameState.currentRivalPokemon)
 
   }
   i++
@@ -78,6 +81,7 @@ while (a < attackBtnsEl.length){
 	attackBtnsEl[a].onclick = function(){
 		var attackName = this.dataset.attack
 		gameState.currentUserAttack = attackName
+
 		play(attackName, cpuAttack())
 	}
 	a++
@@ -92,10 +96,20 @@ var calculateHealth = function(user){
 	return ((0.2 * Math.sqrt(user[0].level)) * user[0].defense) * user[0].hp
 }
 
+var attackMove = function(attack, level, stack, critical, enemy){
+var attackAmount = ((attack * level) * (stack + critical))
+enemy.health = enemy.health - attackAmount
+
+console.log('enemy.health after: ' + enemy.health)
+}
+
 var play = function(userAttack,cpuAttack){
+	var currentPokemon = gameState.currentPokemon[0]
+	var currentRivalPokemon = gameState.currentPokemon[0]
 	switch(userAttack){
 		case'rock':
 			if(cpuAttack == 'paper'){
+				attackMove(currentPokemon.attack, currentPokemon.level, .8, .5, currentRivalPokemon)
 				console.log('paper wins')
 			}
 			if(cpuAttack == 'scissors'){
